@@ -6,8 +6,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /workspaces
 
 # use the official package
-ADD https://www.tbi.univie.ac.at/RNA/download/debian/debian_10/viennarna_2.4.15-1_amd64.deb .
-ADD https://www.tbi.univie.ac.at/RNA/download/debian/debian_10/viennarna-dev_2.4.15-1_amd64.deb .
+ADD https://www.tbi.univie.ac.at/RNA/download/debian/debian_10/viennarna_2.5.0_amd64.deb .
+ADD https://www.tbi.univie.ac.at/RNA/download/debian/debian_10/viennarna-dev_2.5.0_amd64.deb .
 # ADD https://www.tbi.univie.ac.at/RNA/download/debian/debian_10/python3-rna_2.4.15-1_amd64.deb .
 
 RUN apt-get update \
@@ -39,3 +39,14 @@ RUN rm -rf build && mkdir build \
     && cmake -DCMAKE_BUILD_TYPE=Release .. \
     #&& cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS='-static' -DCMAKE_FIND_LIBRARY_SUFFIXES='.a' .. \ # static link
     && make && make install
+
+
+
+
+# Install miniconda
+ENV CONDA_DIR /opt/conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+     /bin/bash ~/miniconda.sh -b -p /opt/conda
+
+# Put conda in path so we can use conda activate
+ENV PATH=$CONDA_DIR/bin:$PATH
